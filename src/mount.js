@@ -29,9 +29,9 @@
  * * ReconcileTransaction
  *
  * `DefaultInjection` must inject its implementations before any other work can
- * be done. It is part of a renderers initialization process.
+ * be done. It is part of a renderer's initialization process.
  *
- * `Mount` can be thought of a renderers `main` method. All userland code enters
+ * `Mount` can be thought of as a renderer's `main` method. All userland code enters
  * the React world through this door.
  *
  * `ReconcileTransaction` is a class which maintains the logic for how
@@ -77,9 +77,9 @@ const DefaultInjection = require('./injection');
 DefaultInjection.inject();
 
 /**
- * Step 1. Userlands entry into the React world. Regardless of the renderer you
- * use—whether ReactDOM, ReactNative, ReactHardware, ReactBlessed, or one of the
- * many others—all `ReactDOM.render|RN.registerComponent|ReactBlessed.render`
+ * Step 1. Userland's entry into the React world. Regardless of the renderer you
+ * use—-whether ReactDOM, ReactNative, ReactHardware, ReactBlessed, or one of the
+ * many others—-all `ReactDOM.render|RN.registerComponent|ReactBlessed.render`
  * type of methods will enter the React world through this method.
  *
  * As an example:
@@ -113,13 +113,13 @@ const render = (
   // consider applying a `warning` or `invariant` to that argument to ensure the
   // consumer has an educational experience in development mode. A key objective
   // of writing a renderer is to make interacting with the host system simpler.
-  // A given renderer should seek to help its’ users to avoid simple mistakes
+  // A given renderer should seek to help its users avoid simple mistakes
   // such as passing in a non-existent DOM node.
   //
   // @example:
   //   warning.isValidTargetElement(targetElement);
 
-  // Appendix 1: Rerendering A Top Level Element
+  // Appendix 1: Re-rendering A Top Level Element
   // https://github.com/iamdustan/tiny-react-renderer/tree/master/appendix/1-Rendering-A-Top-Level-Element.md
   //
   // If there is a target element or the opportunity to reuse a previous render
@@ -134,16 +134,16 @@ const render = (
   const component = instantiateReactComponent(nextElement);
 
   // The initial render is currently synchronous, but any updates that happen
-  // during rendering, in componentWillMount or componentDidMount, will be
+  // during rendering, in `componentWillMount` or `componentDidMount`, will be
   // batched according to the current batching strategy.
   //
   // Note: there is ongoing research for creating an incremental reconciler
   // which may impact this aspect of renderer creation.
   //
   // Assuming you’ve read the [React Reconciliation Algorithm](https://facebook.github.io/react/docs/reconciliation.html) article on
-  // the React docs, this may be familiar. The “public” API for accomplishing
+  // the React docs, this may be familiar. The “public” API for accomplishing
   // this is done with a batching strategy and transaction. React provides
-  // default implementations for both of these and do not require any effort
+  // default implementations for both of these and does not require any effort
   // from us other than calling them.
   ReactUpdates.batchedUpdates(() => {
     // Two points to React for using object pooling internally and being good

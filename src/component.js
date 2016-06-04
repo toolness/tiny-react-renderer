@@ -12,9 +12,9 @@
 
 /**
  * React Components are the heart and soul of a React renderer. This is the
- * internal side of a consumers’ ReactComponents. At a high level, you will
+ * internal side of a consumer's ReactComponents. At a high level, you will
  * define one or more internal components to map to the public interface of your
- * renderer. Below this we have defined two ReactComponents.
+ * renderer. Below this we have defined two ReactComponents:
  *
  * * MinimumViableComponent
  * * TinyRendererComponent
@@ -37,12 +37,11 @@ const serialize = require('./utilities/serialize');
  *
  * This has a very symmetrical relationship to the userland side of creating a
  * React Component. There are the additional private methods used by other parts
- * of React Core, such as `getPublicInstance` or
- * React <= 15.0 `getNativeNode`
- * React > 15.0 `getHostNode`
+ * of React Core, such as `getPublicInstance` or `getHostNode` (or `getNativeNode`
+ * in React <= 15.0).
  */
 const MinimumViableComponent = function(element) {
-  // This internal API—while relatively unchanged for a while—is likely pretty
+  // This internal API—-while relatively unchanged for a while—-is likely pretty
   // volatile. Many of these names began with ReactDOM and ReactART which may
   // not be the *best* abstraction for them.
 
@@ -54,8 +53,8 @@ const MinimumViableComponent = function(element) {
   // simple representation that maps to the final result such as native UI
   // controls.
   this._mountImage = null;
-  // `this._renderedChildren` is something in the form of null|Child|Array<Child>
-  // `ReactMultiChild.Mixin` is primarily responsible for managing this property
+  // `this._renderedChildren` is something in the form of null|Child|Array<Child>.
+  // `ReactMultiChild.Mixin` is primarily responsible for managing this property.
   this._renderedChildren = null;
   // `this._currentElement` is the currently rendered ReactElement. This is
   // important because it allows you to compare the node and props on lifecycle
@@ -65,17 +64,19 @@ const MinimumViableComponent = function(element) {
 
 MinimumViableComponent.prototype = Object.assign(
   {
-    // a nice symmetry to [TODO: React Lifecycle Methods] exists here.
+    // A nice symmetry to [React Lifecycle Methods][] exists here.
     // these are the required methods to implement. You may additionally provide
     // custom implementations of other lifecycle methods or any arbitrary
     // methods that are private to your implementation.
+    //
+    // [React Lifecycle Methods]: https://facebook.github.io/react/docs/component-specs.html#lifecycle-methods
     getPublicInstance() {},
     mountComponent() {},
     receiveComponent() {},
     unmountComponent() {},
-    // implement both of these for now. React <= 15.0 uses getNativeNode, but
+    // Implement both of these for now. React <= 15.0 uses getNativeNode, but
     // that is confusing. Host environment is more accurate and will be used
-    // going forward
+    // going forward.
     getNativeNode() {},
     getHostNode() {}
   },
@@ -116,9 +117,9 @@ const TinyRendererComponentMixin = {
   getPublicInstance() {
     // serialize.toJSON is the default serialization provided.
     //
-    // It simple returns the node.props of a component with serialized children.
-    // It also looks if a component has a custom `toJSON` method and will use
-    // that instead—allowing consumers to provide their own serialization and
+    // It simply returns the node.props of a component with serialized children.
+    // It also checks if a component has a custom `toJSON` method and will use
+    // that instead—-allowing consumers to provide their own serialization and
     // impacting the resulting public instance.
 
     return serialize.toJSON(this.node)
@@ -130,7 +131,7 @@ const TinyRendererComponentMixin = {
     nativeContainerInfo,
     context
   ) {
-    // in a not-so-tiny renderer you would also want to validate the properties
+    // In a not-so-tiny renderer you would also want to validate the properties
     // (dev mode) and apply them to the host environment.
     // I have often seen renderers have a `render` method defined on their
     // internal component implementation that is responsible for calling the
@@ -143,12 +144,12 @@ const TinyRendererComponentMixin = {
   },
 
   receiveComponent(nextElement, transaction, context) {
-    // typically you would diff the props and apply those to the host
+    // Typically you would diff the props and apply those to the host
     // environment, though all we need to do is swap out our _currentElement.
     const prevElement = this._currentElement;
     this._currentElement = nextElement;
 
-    // this.updateChildren comes from ReactMultiChild.Mixin
+    // this.updateChildren comes from ReactMultiChild.Mixin.
     this.updateChildren(nextElement.props.children, transaction, context);
   },
   // there is no native node
